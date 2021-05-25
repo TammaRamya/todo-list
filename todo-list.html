@@ -1,0 +1,154 @@
+<html>
+<head>
+<title>TodoMatic</title>
+<h1>TodoMatic</h1>
+<h2>What needs top be done?</h2>
+</head>
+<body>
+<form action="javascript:void(0);" method="POST" onsubmit="matic.Add()"> 
+  <input type="text" id="add-name" placeholder="Enter the new task ">
+  <input type="submit" value="Add">
+</form>
+<button onclick="matic.FetchAll()">show all tasks</button>
+<button onclick="matic.FetchAl()">show active tasks</button>
+<button onclick="matic.Com()">show completed tasks</button>
+<table>
+  <tr>
+  </tr>
+    <tbody id="tasks">
+    </tbody>
+</table>
+<h2> Tasks remaining </h2>
+<div id="spoiler" role="aria-hidden">
+  <form action="javascript:void(0);" method="POST" id="saveEdit">
+    <input type="text" id="edit-name">
+    <input type="submit" value="Edit" /> <a onclick="CloseInput()" aria-label="Close">&#10006;</a>
+  </form>
+</div>
+<p id="counter1"></p>
+
+<table>
+  <tr>
+  </tr>
+    <tbody id="remaining">
+    </tbody>
+</table>
+<h2> Tasks completed </h2>
+<table>
+  <tr>
+  </tr>
+    <tbody id="Completed">
+    </tbody>
+</table>
+<script>
+var matic = new function() {
+
+  this.el = document.getElementById('tasks');
+  this.tasks = ["Eat","Sleep"];
+this.tas=["Eat","Sleep"];
+this.com=[];
+this.e2 = document.getElementById('remaining');
+this.e3= document.getElementById('Completed');
+  this.FetchAll = function() {
+    var data = '';
+
+    if (this.tasks.length > 0) {
+      for (i = 0; i < this.tasks.length; i++) {
+        data += '<tr>';
+        data += '<td>' + this.tasks[i] + '</td>';
+        data += '</tr>';
+      }
+    }
+    return this.el.innerHTML = data;
+  };
+
+  this.Add = function () {
+    el = document.getElementById('add-name');
+    var task = el.value;
+
+    if (task) {
+      this.tasks.push(task);
+      this.tas.push(task);
+      el.value = '';
+    }
+  };
+this.Count1 = function(data2) {
+    var e2  = document.getElementById('counter1');
+    var name = 'remain';
+
+    if (data2) {
+      if (data2 > 1) {
+        name = 'remaining';
+      }
+      e2.innerHTML = data + ' ' + name ;
+    } else {
+      e2.innerHTML = 'No ' + name;
+    }
+  };
+
+  this.FetchAl = function() {
+    var data2 = '';
+
+    if (this.tas.length > 0) {
+      for (i = 0; i < this.tas.length; i++) {
+        data2 += '<tr>';
+        data2 += '<td>' + this.tas[i]+ '</td>';
+        data2 += '<td><button onclick="matic.Edit(' + i + ')">Edit</button></td>';
+        data2 += '<td><button onclick="matic.Delete(' + i + ')">Delete</button></td>';
+        data2 += '<td><button onclick="matic.Complete(' + i + ')">Complete</button></td>';
+        data2 += '</tr>';
+      }
+    }
+    return this.e2.innerHTML = data2;
+  };
+
+
+  this.Edit = function (item) {
+    var e2 = document.getElementById('edit-name');
+    e2.value = this.tas[item];
+    document.getElementById('spoiler').style.display = 'block';
+    self = this;
+
+    document.getElementById('saveEdit').onsubmit = function() {
+      var remain = e2.value;
+
+      if (remain) {
+        self.tas.splice(item, 1, remain.trim());
+        self.FetchAl();
+        CloseInput();
+      }
+    }
+  };
+
+  this.Delete = function (item) {
+    this.tas.splice(item, 1);
+    this.FetchAl();
+  };
+this.Complete= function (item) {
+ 
+      var h = this.tasks[item];
+     this.com.push(h);
+    this.tas.splice(item, 1);
+    this.FetchAl();
+  };
+this.Com = function() {
+    var data3= '';
+
+    if (this.com.length > 0) {
+      for (i = 0; i < this.com.length; i++) {
+        data3 += '<tr>';
+        data3 += '<td>' + this.com[i] + '</td>';
+        data3 += '</tr>';
+      }
+    }
+    return this.e3.innerHTML = data3;
+  };
+}
+matic.FetchAl();
+
+function CloseInput() {
+  document.getElementById('spoiler').style.display = 'none';
+}
+</script>
+</body>
+</html> 
